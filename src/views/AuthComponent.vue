@@ -1,11 +1,5 @@
 <template>
-    <!-- <div class="row">
-        <h1>
-            TimeLine
-        </h1>
-    </div> -->
     <div class="wrapper">
-
         <div class="sign-in-page">
             <div class="signin-popup">
                 <div class="signin-pop">
@@ -26,88 +20,91 @@
                                     <li data-tab="tab-1" v-on:click="chooseType('login')" :class="{current : choseType == 'login'}"><a href="#" title="">サインイン</a></li>
                                     <li data-tab="tab-2" v-on:click="chooseType('register')" :class="{current : choseType == 'register'}"><a href="#" title="">サインアップ</a></li>
                                 </ul>
-                                <div class="sign_in_sec " :class="{current : choseType == 'login'}" id="tab-1">
+                                <div class="sign_in_sec" :class="{current : choseType == 'login'}" id="tab-1">
                                     <h3>サインイン</h3>
-                                    <form>
+                                    <div class="form">
                                         <div class="row">
                                             <div class="col-lg-12 no-pdd">
                                                 <div class="sn-field">
-                                                    <input type="text" name="email" placeholder="メール">
+                                                    <input type="email" name="email" placeholder="メール" v-model="loginEmail">
                                                     <i class="fa fa-user"></i>
+                                                    <span class="text-danger msgError">{{ loginErrEmailMsg }}</span>
                                                 </div>
                                                 <!--sn-field end-->
                                             </div>
                                             <div class="col-lg-12 no-pdd">
                                                 <div class="sn-field">
-                                                    <input type="password" name="password" placeholder="Password">
+                                                    <input type="password" name="password" placeholder="Password" v-model="loginPassword">
                                                     <i class="fa fa-lock"></i>
+                                                    <span class="text-danger msgError">{{ loginErrPasswordMsg }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12 no-pdd">
-                                                <button type="submit" value="submit">サインイン</button>
+                                                <button type="submit" value="submit" v-on:click="login()">サインイン</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                     <!--login-resources end-->
                                 </div>
                                 <!--sign_in_sec end-->
                                 <div class="sign_in_sec" :class="{current : choseType == 'register'}" id="tab-2">
                                     <!--signup-tab end-->
                                     <div class="dff-tab current" id="tab-3">
-                                        <form action="#">
+                                        <div class="form">
                                             <div class="row">
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="sn-field">
-                                                        <input type="email" name="email" v-model="registerEmail"  placeholder="メール">
+                                                        <input type="email" name="email" v-model="registerEmail" placeholder="メール">
                                                         <i class="fa fa-envelope"></i>
-                                                        <span class="text-danger msgrr">{{ registerErrEmailMsg }}</span>
+                                                        <span class="text-danger msgError">{{ registerErrEmailMsg }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="sn-field">
                                                         <input type="text" name="name" v-model="registerFullName" placeholder="氏名">
                                                         <i class="fa fa-user"></i>
-                                                        <span class="text-danger msgrr">{{ registerErrFullNameMsg }}</span>
+                                                        <span class="text-danger msgError">{{ registerErrFullNameMsg }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="sn-field">
-                                                        <input type="text" name="country" v-model="registerCountry"  placeholder="国">
+                                                        <input type="text" name="country" v-model="registerCountry" placeholder="国">
                                                         <i class="fa fa-globe"></i>
-                                                        <span class="text-danger msgrr">{{ registerErrCountryMsg }}</span>
+                                                        <span class="text-danger msgError">{{ registerErrCountryMsg }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="sn-field">
-                                                        <input type="password" name="password" v-model="registerPassword"  placeholder="Password">
+                                                        <input type="password" v-model="registerPassword" name="password" placeholder="Password">
                                                         <i class="fa fa-lock"></i>
-                                                        <span class="text-danger msgrr">{{ registerErrPasswordMsg }}</span>
+                                                        <span class="text-danger msgError">{{ registerErrPasswordMsg }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="sn-field">
-                                                        <input type="password" name="repeat-password" v-model="registerRePassword"  placeholder="Repeat Password">
+                                                        <input type="password" v-model="registerRePassword" name="repeat-password" placeholder="Repeat Password">
                                                         <i class="fa fa-lock"></i>
-                                                        <span class="text-danger msgrr">{{ registerErrRePasswordMsg}}</span>
+                                                        <span class="text-danger msgError">{{ registerErrRePasswordMsg }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 no-pdd">
                                                     <div class="checky-sec st2">
                                                         <div class="fgt-sec">
-                                                            <input type="checkbox" v-on:click="registerCheckAllow()":checked="this.registerTOS === true" name="cc" id="c2">
+                                                            <input type="checkbox" v-on:click="registerCheckAllow()" :checked="this.registerTOS === true" name="cc" id="c2">
                                                             <label for="c2">
-																<span></span>
-															</label>
+                                                                <span></span>
+                                                            </label>
                                                             <small>はい、Wise の利用規約を理解し、同意します。</small>
                                                         </div>
                                                         <!--fgt-sec end-->
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12 no-pdd">
-                                                    <button :class="{ 'cursor-not-allowed' : this.registerTOS === false }" :disabled="this.registerTOS === false" v-on:click="registerValidation()" >開始する</button>
+                                                <div class="col-lg-12 no-pdd row">
+                                                    <button :class="{'cursor-not-allow' : this.registerTOS === false}" :disabled="this.registerTOS === false" v-on:click="registerValidation()">開始する</button>
+                                                    <img class="btn-register" :class="{'display-none' : this.registerProcess === false}" width="40px" height="40px" src="/src/assets/loading_icon.gif" alt="" srcset="">
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -120,19 +117,11 @@
         </div>
         <!--sign-in-page end-->
     </div>
-    <!--theme-layout end-->
-    <RouterView/>
 </template>
-<!-- <script>
-    export default {
-        clickMe() {
-            alert(0);
-        }
-    }
-</script> -->
 
 <script>
 import axios from 'axios';
+import { requestPermission } from "../firebase"; // Import firebase settings
 
     //import Vue from 'vue'
     //import axios from 'axios'
@@ -150,7 +139,7 @@ import axios from 'axios';
              ******************************* Initialize global variables ***********************************************
              **********************************************************************************************************/
             return {
-                msg: 'Tôi là thành phần con.', 
+                msg: 'Tôi là thành phần con.',
                 choseType: 'login',
                 registerEmail: '',
                 registerErrEmailMsg: '',
@@ -163,7 +152,15 @@ import axios from 'axios';
                 registerRePassword: '',
                 registerErrRePasswordMsg: '',
                 registerTOS: false,
-
+                registerProcess: false,
+                // For login form
+                loginEmail: '',
+                loginPassword: '',
+                loginTOS: false,
+                loginErrEmailMsg: '',
+                loginErrPasswordMsg: '',
+                loginProcess: false,
+                token: null
             }
         },
         /**
@@ -204,6 +201,9 @@ import axios from 'axios';
              **********************************************************************************************************/
             msg() {
                 console.log("When the value of the msg variable changes, this method will be executed.");
+            }, 
+            token() {
+                alert(this.token);
             }
         },
         computed: {
@@ -241,13 +241,90 @@ import axios from 'axios';
             },
 
             /**
-             * Default local function choose login or register
+             * Default local function chose login or register
              * 
-             * $param type string 'login' or 'register'
-             * 
-            */
-             chooseType(type) {
+             * @param type string 'login' or 'register'
+             */
+            chooseType(type) {
                 this.choseType = type;
+            },
+
+            /**
+             * Validate function.
+             * 
+             * Show msg error or endable button register
+             * Call to function register and send data to server.
+             */
+            registerValidation() {
+                // Validate email
+                if (this.registerEmail == '') {
+                    this.registerErrEmailMsg = 'Email ユーザ名を入力してください。';
+                } else {
+                    this.registerErrEmailMsg = '';
+                }
+                // Validate FullName
+                if (this.registerFullName == '') {
+                    this.registerErrFullNameMsg = '氏名 ユーザ名を入力してください。';
+                } else {
+                    this.registerErrFullNameMsg = '';
+                }
+                // Validate country
+                if (this.registerCountry == '') {
+                    this.registerErrCountryMsg = '国 ユーザ名を入力してください。';
+                } else if (this.registerCountry.length < 4) {
+                    this.registerErrCountryMsg = '国名は 3 文字以上である必要があります';
+                } else {
+                    this.registerErrCountryMsg = '';
+                }
+                // Validate password
+                if (this.registerPassword == '') {
+                    this.registerErrPasswordMsg = 'Password ユーザ名を入力してください。';
+                } else if (this.registerPassword < 8) {
+                    this.registerErrPasswordMsg = 'Password 名は 8 文字以上である必要があります';
+                } else {
+                    this.registerErrPasswordMsg = '';
+                }
+                // Validate Repassword
+                if (this.registerPassword != this.registerRePassword) {
+                    this.registerErrRePasswordMsg = '確認用パスワードが間違っています。';
+                } else {
+                    this.registerErrRePasswordMsg = '';
+                }
+                // Check all var error
+                if (
+                    this.registerErrRePasswordMsg == '' && this.registerErrPasswordMsg == '' &&
+                    this.registerErrCountryMsg == ''&& this.registerErrFullNameMsg == '' &&
+                    this.registerErrEmailMsg == ''
+                ) {
+                    // Call to server
+                    this.register();
+                }
+                return null;
+            },
+
+            registerCheckAllow() {
+                if (this.registerTOS === true) {
+                    this.registerTOS = false;
+                } else if (this.registerTOS === false) {
+                    this.registerTOS = true;
+                }
+            },
+
+            login() {
+                if (this.loginEmail.length <= 0) {
+                    this.loginErrEmailMsg = "Email ユーザ名を入力してください。";
+                } else {
+                    this.loginErrEmailMsg = "";
+                }
+                if (this.loginPassword.length <= 0) {
+                    this.loginErrPasswordMsg = "Password を入力してください。";
+                } else {
+                    this.loginErrPasswordMsg = "";
+                }
+                if (this.loginErrEmailMsg == "" && this.loginErrPasswordMsg == "") {
+                    // Call to function login
+                    this.processLogin();
+                }
             },
 
             /***********************************************************************************************************
@@ -267,102 +344,167 @@ import axios from 'axios';
                     console.log(err);
                 }
             },
+
             /**
-             * Async await function register 
+             * Async await function register
              * 
-             * call to api endpoint/ register
-             * method post pass param 
-             * regitect router / auth
+             * Call to api endpoint /register
+             * Method post pass param
+             * Regirect router /auth
              */
-
             async register() {
+                // Disabled button register
+                this.registerCheckAllow();
+                this.registerProcess = true;
                 try {
-                    const callRegisterAPI = await axios.post('/register', {
-                        // pass param to headder
+                    const callRegisterAPI = await axios.post('http://wise_social_api.test/api/register', {
+                        // Pass param to header
+                        name: this.registerFullName,
+                        email: this.registerEmail,
+                        password: this.registerPassword,
+                        re_password: this.registerRePassword
                     }).then(function (res) {
-                        // API response success
+                        // Api response success
+                        if (res.data.code == 200) {
+                            window.location.reload();
+                        } else {
+                            alert(res.data.message);
+                        }
                     }).catch(function (err) {
-                        // PAI response err code 
+                        // API response error code
+                        alert(err);
                     });
-                    
                 } catch (err) {
-                    //call api failed 
+                    // Call to api failed
+                    console.log(err);
                 }
+                // Enabled button register
+                this.registerCheckAllow();
+                this.registerProcess = false;
             },
-
 
             /**
-             *  validate function
-             * shiw msg error or enable button register 
-             * call to function register and send data to server.
+             * Async await function login
              * 
-            */
-            registerValidation() {
-                // validate email 
-                if (this.registerEmail == '') {
-                    this.registerErrEmailMsg = 'Email ユーザ名を入力してください。';
-                } else {
-                    this.registerErrEmailMsg = '';
-                }
-                // validate fullname
-                if (this.registerFullName == '') {
-                    this.registerErrFullNameMsg = '氏名 ユーザ名を入力してください。';
-                } else {
-                    this.registerErrFullNameMsg = '';
-                }
-                // validate country 
-                if (this.registerCountry == '') {
-                    this.registerErrCountryMsg = '国 ユーザ名を入力してください。';
-                } else if (this.registerCountry.length < 4) {
-                    this.registerErrCountryMsg = '国名は 3 文字以上である必要があります';
-                } else {
-                    this.registerErrCountryMsg = '';
-                }
-                //validate password
-                if (this.registerPassword == '') {
-                    this.registerErrPasswordMsg = 'password ユーザ名を入力してください。';
-                } else if (this.registerPassword.length < 8) {
-                    this.registerErrPasswordMsg = 'password 8 文字以上である必要があります';
-                } else {
-                    this.registerErrPasswordMsg = '';
-                }
-                //validate repassword
-                if (this.registerRePassword != this.registerPassword ) {
-                    this.registerErrRePasswordMsg = '確認用パスワードが間違っています。';
-                } else {
-                    this.registerErrRePasswordMsg = '';
-                }
-                // check all var error 
-                if (
-                    this.registerErrorEmailMsg == "" &&
-                    this.registerErrorPasswordMsg == "" &&
-                    this.registerErrorRePasswordMsg == "" &&
-                    this.registerErrorFullNameMsg == "" &&
-                    this.registerErrorCountryMsg == ""
-                ) {
-                    // call to server
-                    this.register();
-                };
-            },
-            registerCheckAllow() {
-                if (this.registerTOS === true) {
-                    this.registerTOS = false;
-                } else {
-                    this.registerTOS = true;
-                }
+             * Call to api endpoint /login
+             * Method post pass param
+             * Regirect router /auth
+             */
+            // async processLogin() {
+            //     // Disabled button register
+            //     this.loginProcess = true;
+            //     try {
+            //         const callRegisterAPI = await axios.post('http://wise_social_api.test/api/login', {
+            //             // Pass param to header
+            //             email: this.loginEmail, 
+            //             password: this.loginPassword,
+            //         }).then(function (res) {
+            //             // Api response success
+            //             if (res.data.code == 200) {
+            //                 //console.log(res.data.data.plainTextToken);
+            //                 // save to session storage
+            //                 sessionStorage.setItem("token", res.data.data.plainTextToken);
+            //                 // Request notification permission when the app starts.
+            //                 requestPermission().then(fcmToken => {
+            //                     // Using axios call to server add token to DB
+            //                     axios.get('http://wise_social_api.test/api/setDeviceToken', {
+            //                         // pass param to header
+            //                         headers: {
+            //                             "Content-type" : "application/json",
+            //                             "Authorization": "Bearer " + res.data.data.plainTextToken  
+            //                         },
+            //                         param: {
+            //                             fcmToken: fcmToken,
+            //                         }                                   
+            //                     });
+            //                 }).catch(err => {
+            //                     console.error("Get token ereors: :", err);
+            //                 });
+            //                 window.location.href = "/index";
+            //             } else {
+            //                 alert(res.data.message);
+            //             }
+            //         }).catch(function (err) {
+            //             // API response error code
+            //             alert(err);
+            //         });
+            //     } catch (err) {
+            //         // Call to api failed
+            //         console.log(err);
+            //     }
+            //     // Enabled button register
+            //     this.loginProcess = false;
+            // }
+            async processLogin() {
+      // Disable register button while processing
+            this.loginProcessing = true;
+
+            try {
+                const callLoginAPI = await axios
+                .post("http://wise_social_api.test/api/login", {
+                    // Pass param to header
+                    email: this.loginEmail,
+                    password: this.loginPassword,
+                })
+                .then(function (res) {
+                    // Api response success
+                    if (res.data.code == 200) {
+                    // Save token to session storage
+                    sessionStorage.setItem("token", res.data.data.plainTextToken);
+
+                    // Request notification permission when the app starts.
+                    requestPermission()
+                        .then((fcmToken) => {
+                        // Using axios call to server add token to DB
+                        axios.get(
+                            "http://wise_social_api.test/api/setDeviceToken",
+                            {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + res.data.data.plainTextToken,
+                            },
+                            params: {
+                                // Pass param to header
+                                fcmToken: fcmToken,
+                            },
+                            }
+                        ).then(function() {
+                            window.location.href = "/index";
+                        })
+                        })
+                        .catch((err) => {
+                        console.error("Get token error: ", err);
+                        });
+                    
+
+                    } else {
+                    alert(res.data.message);
+                    }
+                })
+                .catch(function (err) {
+                    // API response error code
+                    alert(err);
+                });
+            } catch (err) {
+                // Call to api failed
+                console.log(err);
+            }
+            // Re-enable button
+            this.registerProcessing = false;
             },
         },
     }
 </script>
 
 <style>
-/*cus tom local css
+/**
+* Custom local style css
 */
-.msgrr {
-    right: 5px !important;
+.msgError {
     font-size: 10px !important;
+    right: 0px !important;
 }
-.cursor-not-allowed {
+.cursor-not-allow {
     cursor: not-allowed !important;
 }
 </style>
